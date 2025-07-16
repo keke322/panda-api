@@ -6,10 +6,8 @@ using Panda.Validators;
 using Panda.Repositories;
 using Panda.Services;
 using System.Text.Json.Serialization;
+using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using AutoMapper;
-using Panda.DTOs;
 
 
 
@@ -29,11 +27,7 @@ builder.Services.AddScoped<IValidator<Patient>, PatientValidator>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 
 // --- AutoMapper
-builder.Services.AddAutoMapper(cfg =>
-{
-    cfg.CreateMap<Patient, PatientDto>();
-    //cfg.CreateMap<Bar, BarDto>();
-});
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // --- Controllers
 builder.Services.AddControllers()
