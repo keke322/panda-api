@@ -13,7 +13,7 @@ public class PandaDbContext : DbContext
     }
 
     public DbSet<Patient> Patients { get; set; }
-    // Future: public DbSet<Appointment> Appointments { get; set; }
+    public DbSet<Appointment> Appointments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -40,17 +40,20 @@ public class PandaDbContext : DbContext
                 .HasMaxLength(8);
         });
 
-        // If you add Appointments, configure similarly:
-        /*
         modelBuilder.Entity<Appointment>(entity =>
         {
             entity.HasKey(e => e.Id);
+            entity.Property(e => e.Status).IsRequired().HasMaxLength(20);
             entity.Property(e => e.ScheduledAt).IsRequired();
+            entity.Property(e => e.DurationMinutes).IsRequired();
+            entity.Property(e => e.Clinician).HasMaxLength(100);
+            entity.Property(e => e.Department).HasMaxLength(100);
+            entity.Property(e => e.Postcode).HasMaxLength(8);
+
             entity.HasOne(e => e.Patient)
                 .WithMany()
                 .HasForeignKey(e => e.PatientId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
-        */
     }
 }

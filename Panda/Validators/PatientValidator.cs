@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Panda.Api.Utils;
 using Panda.Models;
 using System.Text.RegularExpressions;
 
@@ -20,7 +21,7 @@ public class PatientValidator : AbstractValidator<Patient>
             .WithMessage("Invalid NHS number checksum.");
 
         RuleFor(x => x.Postcode)
-            .Must(BeValidUkPostcode)
+            .Must(ValidationUtils.IsValidUkPostcode)
             .WithMessage("Invalid UK postcode format.");
     }
 
@@ -47,18 +48,5 @@ public class PatientValidator : AbstractValidator<Patient>
         if (checkDigit == 10) return false;
 
         return checkDigit == (nhsNumber[9] - '0');
-    }
-
-    private bool BeValidUkPostcode(string postcode)
-    {
-        if (string.IsNullOrWhiteSpace(postcode))
-            return false;
-
-        // General UK postcode regex
-        var regex = new Regex(
-            @"^(GIR 0AA|[A-Z]{1,2}\d{1,2} ?\d[A-Z]{2}|[A-Z]{1,2}\d[A-Z] ?\d[A-Z]{2}|[A-Z]{1,2}\d{2} ?\d[A-Z]{2})$",
-            RegexOptions.IgnoreCase);
-
-        return regex.IsMatch(postcode.Trim());
     }
 }

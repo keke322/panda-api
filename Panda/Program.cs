@@ -25,6 +25,9 @@ builder.Services.AddDbContext<PandaDbContext>(options =>
 builder.Services.AddScoped<IRepository<Patient>, PatientRepository>();
 builder.Services.AddScoped<IValidator<Patient>, PatientValidator>();
 builder.Services.AddScoped<IPatientService, PatientService>();
+builder.Services.AddScoped<IRepository<Appointment>, AppointmentRepository>();
+builder.Services.AddScoped<IValidator<Appointment>, AppointmentValidator>();
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 
 // --- AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

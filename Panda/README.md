@@ -69,3 +69,4 @@ This is the backend API for PANDA, a CRUD application for tracking patients and 
 
 Swagger UI available at:
 
+Latests version of AutoMapper was not used as it now requires a service key
