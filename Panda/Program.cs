@@ -6,10 +6,9 @@ using Panda.Validators;
 using Panda.Repositories;
 using Panda.Services;
 using System.Text.Json.Serialization;
+using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
-
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +18,7 @@ builder.Logging.AddConsole();
 
 // --- EF Core (SQLite example, swap easily to SqlServer or Postgres)
 builder.Services.AddDbContext<PandaDbContext>(options =>
-    options.UseSqlite("Data Source=panda.db"));
+    options.UseSqlite("Data Source=SQLite\\panda.db"));
 
 // --- Dependency Injection
 builder.Services.AddScoped<IRepository<Patient>, PatientRepository>();
@@ -42,7 +41,15 @@ builder.Services.AddControllers()
 
 // --- Swagger for testing
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "PANDA",
+        Description = "Patient Appointment Network Data Application MVP"
+    });
+});
 
 var app = builder.Build();
 

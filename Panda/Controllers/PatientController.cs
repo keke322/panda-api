@@ -4,11 +4,13 @@ using Panda.DTOs;
 using Panda.Models;
 using Panda.Services;
 using FluentValidation;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Panda.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 public class PatientsController : ControllerBase
 {
     private readonly IPatientService _patientService;
@@ -24,6 +26,7 @@ public class PatientsController : ControllerBase
 
     // GET: api/patients
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<PatientDto>))]
     public async Task<ActionResult<IEnumerable<PatientDto>>> GetAll()
     {
         var patients = await _patientService.GetAllAsync();
@@ -32,6 +35,7 @@ public class PatientsController : ControllerBase
 
     // GET: api/patients/{id}
     [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PatientDto))]
     public async Task<ActionResult<PatientDto>> GetById(Guid id)
     {
         var patient = await _patientService.GetByIdAsync(id);
@@ -43,6 +47,7 @@ public class PatientsController : ControllerBase
 
     // POST: api/patients
     [HttpPost]
+    [SwaggerResponse(statusCode: StatusCodes.Status400BadRequest, description: "Bad request")]
     public async Task<ActionResult<PatientDto>> Create([FromBody] CreatePatientDto dto)
     {
         try
@@ -59,6 +64,7 @@ public class PatientsController : ControllerBase
 
     // PUT: api/patients/{id}
     [HttpPut("{id}")]
+    [SwaggerResponse(statusCode: StatusCodes.Status400BadRequest, description: "Bad request")]
     public async Task<ActionResult<PatientDto>> Update(Guid id, [FromBody] UpdatePatientDto dto)
     {
         try
@@ -79,6 +85,7 @@ public class PatientsController : ControllerBase
 
     // DELETE: api/patients/{id}
     [HttpDelete("{id}")]
+    [SwaggerResponse(statusCode: StatusCodes.Status400BadRequest, description: "Bad request")]
     public async Task<IActionResult> Delete(Guid id)
     {
         var deleted = await _patientService.DeleteAsync(id);
