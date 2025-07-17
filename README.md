@@ -15,7 +15,7 @@ This is the backend API for PANDA, a CRUD application for tracking patients and 
 
 ---
 
-## ✨ Features
+## Features
 
 ✅ CRUD for patients  
 ✅ NHS number MOD11 checksum validation  
@@ -27,7 +27,7 @@ This is the backend API for PANDA, a CRUD application for tracking patients and 
 
 ---
 
-## ⚙️ How to run locally
+## How to run locally
 
 1. **Clone the repository**
     ```bash
@@ -57,7 +57,7 @@ This is the backend API for PANDA, a CRUD application for tracking patients and 
 
 ---
 
-## 📚 API Endpoints
+## API Endpoints
 
 | Method | URL                  | Description              |
 |--------|----------------------|--------------------------|
