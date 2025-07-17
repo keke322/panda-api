@@ -42,7 +42,6 @@ This is the backend API for PANDA, a CRUD application for tracking patients and 
 
 3. **Run migrations**
     ```bash
-    dotnet ef migrations add InitialCreate
     dotnet ef database update
     ```
 
@@ -52,7 +51,7 @@ This is the backend API for PANDA, a CRUD application for tracking patients and 
     ```
     The API will be available at:  
     ```
-    https://localhost:5001
+    https://localhost:7099
     ```
 
 ---
@@ -69,4 +68,5 @@ This is the backend API for PANDA, a CRUD application for tracking patients and 
 
 Swagger UI available at:
 
+https://localhost:7099/swagger/index.html
 Latests version of AutoMapper was not used as it now requires a service key
