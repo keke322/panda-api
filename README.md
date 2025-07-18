@@ -6,7 +6,7 @@ This is the backend API for PANDA, a CRUD application for tracking patients and 
 
 ## Tech Stack
 
-- **.NET 7 Web API**
+- **.NET 8 Web API**
 - **EF Core** (SQLite for fast MVP, swappable to SQL Server / PostgreSQL)
 - **FluentValidation** for business validation (NHS number checksum, postcode)
 - **AutoMapper** for DTO mapping
@@ -52,7 +52,7 @@ This is the backend API for PANDA, a CRUD application for tracking patients and 
     ```
     The API will be available at:  
     ```
-    https://localhost:7099
+    http://localhost:5224
     ```
 
 ---
@@ -69,5 +69,5 @@ This is the backend API for PANDA, a CRUD application for tracking patients and 
 
 Swagger UI available at:
 
-https://localhost:7099/swagger/index.html
+http://localhost:5224/swagger/index.html
 Latests version of AutoMapper was not used as it now requires a service key

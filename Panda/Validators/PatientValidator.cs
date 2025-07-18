@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.Extensions.Localization;
 using Panda.Api.Utils;
 using Panda.Models;
 using System.Text.RegularExpressions;
@@ -7,21 +8,22 @@ namespace Panda.Validators;
 
 public class PatientValidator : AbstractValidator<Patient>
 {
-    public PatientValidator()
+    public PatientValidator(IStringLocalizer<PatientValidator> localizer)
     {
         RuleFor(x => x.Name)
             .NotEmpty()
             .MaximumLength(100);
 
         RuleFor(x => x.DateOfBirth)
-            .LessThan(DateTimeOffset.UtcNow).WithMessage("Date of birth must be in the past.");
+            .LessThan(DateTimeOffset.UtcNow)
+            .WithMessage(localizer["DateOfBirth_Invalid"].Value);
 
         RuleFor(x => x.NhsNumber)
             .Must(ValidationUtils.BeValidNhsNumber)
-            .WithMessage("Invalid NHS number checksum.");
+            .WithMessage(localizer["NhsNumber_Invalid"].Value);
 
         RuleFor(x => x.Postcode)
             .Must(ValidationUtils.IsValidUkPostcode)
-            .WithMessage("Invalid UK postcode format.");
+            .WithMessage(localizer["Postcode_Invalid"].Value);
     }
 }

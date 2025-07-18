@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.Extensions.Localization;
 using Panda.Api.Utils;
 using Panda.Models;
 using System.Text.RegularExpressions;
@@ -7,18 +8,15 @@ namespace Panda.Validators;
 
 public class AppointmentValidator : AbstractValidator<Appointment>
 {
-    public AppointmentValidator()
+    public AppointmentValidator(IStringLocalizer<AppointmentValidator> localizer)
     {
-        RuleFor(a => a.PatientId)
-            .NotEmpty().WithMessage("PatientId is required.");
-
         RuleFor(a => a.ScheduledAt)
             .GreaterThan(DateTimeOffset.UtcNow.AddMinutes(-5))
-            .WithMessage("Scheduled time must be in the present or future.");
+            .WithMessage(localizer["Schedule_NowOrFuture"]);
 
         RuleFor(a => a.DurationMinutes)
             .GreaterThan(0)
-            .WithMessage("Duration must be a positive number of minutes.");
+            .WithMessage(localizer["Duration_Positive"]);
 
         RuleFor(a => a.Clinician)
             .NotEmpty()
@@ -30,11 +28,11 @@ public class AppointmentValidator : AbstractValidator<Appointment>
 
         RuleFor(a => a.Postcode)
             .Must(ValidationUtils.IsValidUkPostcode)
-            .WithMessage("Invalid UK postcode format.");
+            .WithMessage(localizer["Postcode_Invalid"]);
 
         RuleFor(a => a.Status)
             .NotEmpty()
             .Must(s => s == "scheduled" || s == "attended" || s == "missed" || s == "cancelled")
-            .WithMessage("Status must be scheduled, attended, missed or cancelled.");
+            .WithMessage(localizer["Incorrect_Status"]);
     }
 }
