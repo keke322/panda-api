@@ -7,23 +7,23 @@ This is the backend API for PANDA, a CRUD application for tracking patients and 
 ## Tech Stack
 
 - **.NET 7 Web API**
-- **EF Core** (SQLite by default, easily swappable to SQL Server / PostgreSQL)
+- **EF Core** (SQLite for fast MVP, swappable to SQL Server / PostgreSQL)
 - **FluentValidation** for business validation (NHS number checksum, postcode)
 - **AutoMapper** for DTO mapping
 - **Swagger** for API exploration
-- **XUnit / Moq** (optional for unit tests)
+- **XUnit / Moq** (for unit tests)
 
 ---
 
 ## Features
 
-✅ CRUD for patients  
-✅ NHS number MOD11 checksum validation  
-✅ UK postcode regex validation  
-✅ Timezone-aware dates (`DateTimeOffset`)  
-✅ Localizable error messages ready  
-✅ Database-agnostic repository pattern  
-✅ Swagger UI for easy testing
+- CRUD for patients  
+- NHS number MOD11 checksum validation  
+- UK postcode regex validation  
+- Timezone-aware dates (`DateTimeOffset`)  
+- Localizable error messages  
+- Database-agnostic repository pattern  
+- Swagger UI for easy testing
 
 ---
 
@@ -31,7 +31,7 @@ This is the backend API for PANDA, a CRUD application for tracking patients and 
 
 1. **Clone the repository**
     ```bash
-    git clone https://github.com/your-org/panda-api.git
+    git clone https://github.com/keke322/panda-api.git
     cd panda-api
     ```
 
@@ -42,6 +42,7 @@ This is the backend API for PANDA, a CRUD application for tracking patients and 
 
 3. **Run migrations**
     ```bash
+    cd Panda
     dotnet ef database update
     ```
 
