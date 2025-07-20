@@ -58,10 +58,13 @@ public class AppointmentController : ControllerBase
         }
         catch (ValidationException ex)
         {
-            return BadRequest(new
+            var errors = ex.Errors.Select(e => new ValidationErrorItem
             {
-                errors = ex.Errors.Select(e => new { field = e.PropertyName, message = e.ErrorMessage })
-            });
+                Field = e.PropertyName,
+                Message = e.ErrorMessage
+            }).ToList();
+
+            return BadRequest(new ValidationErrorResponse { Errors = errors });
         }
     }
 
@@ -83,10 +86,13 @@ public class AppointmentController : ControllerBase
         }
         catch (ValidationException ex)
         {
-            return BadRequest(new
+            var errors = ex.Errors.Select(e => new ValidationErrorItem
             {
-                errors = ex.Errors.Select(e => new { field = e.PropertyName, message = e.ErrorMessage })
-            });
+                Field = e.PropertyName,
+                Message = e.ErrorMessage
+            }).ToList();
+
+            return BadRequest(new ValidationErrorResponse { Errors = errors });
         }
     }
 

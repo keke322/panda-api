@@ -58,7 +58,13 @@ public class PatientsController : ControllerBase
         }
         catch (ValidationException ex)
         {
-            return BadRequest(new { errors = ex.Errors.Select(e => new { field = e.PropertyName, message = e.ErrorMessage }) });
+            var errors = ex.Errors.Select(e => new ValidationErrorItem
+            {
+                Field = e.PropertyName,
+                Message = e.ErrorMessage
+            }).ToList();
+
+            return BadRequest(new ValidationErrorResponse { Errors = errors });
         }
     }
 
@@ -79,7 +85,13 @@ public class PatientsController : ControllerBase
         }
         catch (ValidationException ex)
         {
-            return BadRequest(new { errors = ex.Errors.Select(e => new { field = e.PropertyName, message = e.ErrorMessage }) });
+            var errors = ex.Errors.Select(e => new ValidationErrorItem
+            {
+                Field = e.PropertyName,
+                Message = e.ErrorMessage
+            }).ToList();
+
+            return BadRequest(new ValidationErrorResponse { Errors = errors });
         }
     }
 
