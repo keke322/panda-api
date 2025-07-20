@@ -59,13 +59,18 @@ This is the backend API for PANDA, a CRUD application for tracking patients and 
 
 ## API Endpoints
 
-| Method | URL                  | Description              |
-|--------|----------------------|--------------------------|
-| GET    | `/api/patients`      | List all patients        |
-| GET    | `/api/patients/{id}` | Get patient by ID        |
-| POST   | `/api/patients`      | Create a patient         |
-| PUT    | `/api/patients/{id}` | Update a patient         |
-| DELETE | `/api/patients/{id}` | Delete a patient         |
+| Method | URL                              | Description              |
+|--------|----------------------------------|--------------------------|
+| GET    | `/api/patients`                  | List all patients        |
+| GET    | `/api/patients/{id}`             | Get patient by ID        |
+| POST   | `/api/patients`                  | Create a patient         |
+| PUT    | `/api/patients/{id}`             | Update a patient         |
+| DELETE | `/api/patients/{id}`             | Delete a patient         |
+| GET    | `/api/appointment`               | List all appointments    |
+| GET    | `/api/appointment/{id}`          | Get appointment by ID    |
+| POST   | `/api/appointment`               | Create an appointment    |
+| PUT    | `/api/appointment/{id}`          | Update an appointment    |
+| POST   | `/api/appointment/{id}/cancel`   | Cancel an appointment    |
 
 Swagger UI available at:
 
