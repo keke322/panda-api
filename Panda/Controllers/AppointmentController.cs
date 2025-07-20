@@ -47,7 +47,7 @@ public class AppointmentController : ControllerBase
 
     // POST: api/appointment
     [HttpPost]
-    [SwaggerResponse(statusCode: StatusCodes.Status400BadRequest, description: "Bad request")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationErrorResponse))]
     public async Task<ActionResult<AppointmentDto>> Create([FromBody] CreateAppointmentDto dto)
     {
         try
@@ -67,7 +67,7 @@ public class AppointmentController : ControllerBase
 
     // PUT: api/appointment/{id}
     [HttpPut("{id}")]
-    [SwaggerResponse(statusCode: StatusCodes.Status400BadRequest, description: "Bad request")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationErrorResponse))]
     public async Task<ActionResult<AppointmentDto>> Update(Guid id, [FromBody] UpdateAppointmentDto dto)
     {
         try
@@ -92,7 +92,7 @@ public class AppointmentController : ControllerBase
 
     // POST: api/appointment/{id}/cancel
     [HttpPost("{id}/cancel")]
-    [SwaggerResponse(statusCode: StatusCodes.Status400BadRequest, description: "Bad request")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationErrorResponse))]
     public async Task<IActionResult> Cancel(Guid id)
     {
         var cancelled = await _appointmentService.CancelAsync(id);

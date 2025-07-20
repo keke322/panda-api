@@ -1,4 +1,4 @@
-using Panda.DTOs;
+﻿using Panda.DTOs;
 using System.Net.Http.Json;
 using FluentAssertions;
 using System.Net;
@@ -285,6 +285,36 @@ namespace Panda.IntegrationTests
 
             var updated = await checkResponse.Content.ReadFromJsonAsync<AppointmentDto>();
             updated!.Status.Should().Be("missed");
+        }
+
+        [Theory]
+        [InlineData("José")]
+        [InlineData("Mårten")]
+        [InlineData("Łukasz")]
+        [InlineData("Émilie")]
+        [InlineData("Zoë")]
+        [InlineData("François")]
+        public async Task DiacriticNames_ShouldBeCreatedAndGet(string name)
+        {
+            var dto = new CreatePatientDto
+            {
+                Name = name,
+                DateOfBirth = DateTimeOffset.UtcNow.AddYears(-30),
+                NhsNumber = "1373645350",
+                Postcode = "AA1 1AA"
+            };
+
+            var response = await _client.PostAsJsonAsync("/api/patients", dto);
+            response.EnsureSuccessStatusCode();
+
+            var created = await response.Content.ReadFromJsonAsync<PatientDto>();
+            created!.Name.Should().Be(name);
+
+            var getResponse = await _client.GetAsync($"/api/patients/{created!.Id}");
+            getResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var patient = await getResponse.Content.ReadFromJsonAsync<PatientDto>();
+            patient!.Name.Should().Be(name);
         }
     }
 }

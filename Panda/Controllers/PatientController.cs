@@ -47,7 +47,7 @@ public class PatientsController : ControllerBase
 
     // POST: api/patients
     [HttpPost]
-    [SwaggerResponse(statusCode: StatusCodes.Status400BadRequest, description: "Bad request")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationErrorResponse))]
     public async Task<ActionResult<PatientDto>> Create([FromBody] CreatePatientDto dto)
     {
         try
@@ -64,7 +64,7 @@ public class PatientsController : ControllerBase
 
     // PUT: api/patients/{id}
     [HttpPut("{id}")]
-    [SwaggerResponse(statusCode: StatusCodes.Status400BadRequest, description: "Bad request")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationErrorResponse))]
     public async Task<ActionResult<PatientDto>> Update(Guid id, [FromBody] UpdatePatientDto dto)
     {
         try
@@ -85,7 +85,8 @@ public class PatientsController : ControllerBase
 
     // DELETE: api/patients/{id}
     [HttpDelete("{id}")]
-    [SwaggerResponse(statusCode: StatusCodes.Status400BadRequest, description: "Bad request")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(Guid id)
     {
         var deleted = await _patientService.DeleteAsync(id);
