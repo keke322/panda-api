@@ -10,7 +10,7 @@
 
         public DateTimeOffset ScheduledAt { get; set; }
 
-        public int DurationMinutes { get; set; }
+        public string Duration { get; set; } = string.Empty;
 
         public bool Attended { get; set; }
 
@@ -27,9 +27,9 @@
 
         public DateTimeOffset ScheduledAt { get; set; }
 
-        public int DurationMinutes { get; set; }
+        public string Duration { get; set; } = string.Empty;
 
-        public bool Attended { get; set; }
+        public bool Attended { get; set; } = false;
 
         public string Clinician { get; set; } = string.Empty;
 
@@ -43,7 +43,7 @@
 
         public DateTimeOffset ScheduledAt { get; set; }
 
-        public int DurationMinutes { get; set; }
+        public string Duration { get; set; } = string.Empty;
 
         public bool Attended { get; set; }
 

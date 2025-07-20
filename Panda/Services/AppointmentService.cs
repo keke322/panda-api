@@ -3,6 +3,7 @@ using FluentValidation.Results;
 using Panda.Models;
 using Panda.Repositories;
 using Microsoft.Extensions.Logging;
+using Panda.Api.Utils;
 
 namespace Panda.Services;
 
@@ -88,9 +89,15 @@ public class AppointmentService : IAppointmentService
         }
 
         existing.ScheduledAt = appointment.ScheduledAt;
+        existing.Duration = appointment.Duration;
         existing.Department = appointment.Department;
         existing.Clinician = appointment.Clinician;
         existing.Attended = appointment.Attended;
+        if (existing.Attended)
+        {
+            existing.Status = "attended";
+        }
+        existing.Postcode = appointment.Postcode;
 
         await _appointmentRepo.UpdateAsync(existing);
 
@@ -112,10 +119,13 @@ public class AppointmentService : IAppointmentService
         return true;
     }
 
-    private void MarkAsMissedIfNeeded(Appointment appt)
+    public void MarkAsMissedIfNeeded(Appointment appt)
     {
+        var duration = Utils.ParseDurationToSeconds(appt.Duration);
+        var endTime = appt.ScheduledAt.AddSeconds(duration);
+
         if (appt.Status == "scheduled"
-            && appt.ScheduledAt < DateTimeOffset.UtcNow
+            && endTime < DateTimeOffset.UtcNow
             && !appt.Attended)
         {
             appt.Status = "missed";

@@ -24,7 +24,7 @@ public class AppointmentController : ControllerBase
         _logger = logger;
     }
 
-    // GET: api/appointments
+    // GET: api/appointment
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<AppointmentDto>))]
     public async Task<ActionResult<IEnumerable<AppointmentDto>>> GetAll()
@@ -33,7 +33,7 @@ public class AppointmentController : ControllerBase
         return Ok(_mapper.Map<IEnumerable<AppointmentDto>>(appointments));
     }
 
-    // GET: api/appointments/{id}
+    // GET: api/appointment/{id}
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AppointmentDto))]
     public async Task<ActionResult<AppointmentDto>> GetById(Guid id)
@@ -45,7 +45,7 @@ public class AppointmentController : ControllerBase
         return Ok(_mapper.Map<AppointmentDto>(appointment));
     }
 
-    // POST: api/appointments
+    // POST: api/appointment
     [HttpPost]
     [SwaggerResponse(statusCode: StatusCodes.Status400BadRequest, description: "Bad request")]
     public async Task<ActionResult<AppointmentDto>> Create([FromBody] CreateAppointmentDto dto)
@@ -65,7 +65,7 @@ public class AppointmentController : ControllerBase
         }
     }
 
-    // PUT: api/appointments/{id}
+    // PUT: api/appointment/{id}
     [HttpPut("{id}")]
     [SwaggerResponse(statusCode: StatusCodes.Status400BadRequest, description: "Bad request")]
     public async Task<ActionResult<AppointmentDto>> Update(Guid id, [FromBody] UpdateAppointmentDto dto)
@@ -90,7 +90,7 @@ public class AppointmentController : ControllerBase
         }
     }
 
-    // POST: api/appointments/{id}/cancel
+    // POST: api/appointment/{id}/cancel
     [HttpPost("{id}/cancel")]
     [SwaggerResponse(statusCode: StatusCodes.Status400BadRequest, description: "Bad request")]
     public async Task<IActionResult> Cancel(Guid id)

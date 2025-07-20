@@ -19,11 +19,11 @@ public class PatientValidator : AbstractValidator<Patient>
             .WithMessage(localizer["DateOfBirth_Invalid"].Value);
 
         RuleFor(x => x.NhsNumber)
-            .Must(ValidationUtils.BeValidNhsNumber)
+            .Must(Utils.BeValidNhsNumber)
             .WithMessage(localizer["NhsNumber_Invalid"].Value);
 
         RuleFor(x => x.Postcode)
-            .Must(ValidationUtils.IsValidUkPostcode)
+            .Must(Utils.IsValidUkPostcode)
             .WithMessage(localizer["Postcode_Invalid"].Value);
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Xunit;
 using FluentAssertions;
 using Panda.Api.Utils; // Adjust to your actual namespace
-public class ValidationUtilsTests
+public class UtilsTests
 {
     [Theory]
     [InlineData("EC1A 1BB")]
@@ -15,7 +15,7 @@ public class ValidationUtilsTests
     [InlineData(" EC1A1BB ")]
     public void IsValidUkPostcode_ValidFormats_ShouldReturnTrue(string postcode)
     {
-        var result = ValidationUtils.IsValidUkPostcode(postcode);
+        var result = Utils.IsValidUkPostcode(postcode);
         result.Should().BeTrue();
     }
 
@@ -29,7 +29,7 @@ public class ValidationUtilsTests
     [InlineData("INVALID")]
     public void IsValidUkPostcode_InvalidFormats_ShouldReturnFalse(string postcode)
     {
-        var result = ValidationUtils.IsValidUkPostcode(postcode);
+        var result = Utils.IsValidUkPostcode(postcode);
         result.Should().BeFalse();
     }
 
@@ -39,7 +39,7 @@ public class ValidationUtilsTests
     [InlineData("9876543210")]
     public void BeValidNhsNumber_ValidNumbers_ShouldReturnTrue(string nhsNumber)
     {
-        var result = ValidationUtils.BeValidNhsNumber(nhsNumber);
+        var result = Utils.BeValidNhsNumber(nhsNumber);
         result.Should().BeTrue();
     }
 
@@ -54,14 +54,40 @@ public class ValidationUtilsTests
     [InlineData(null)]
     public void BeValidNhsNumber_InvalidNumbers_ShouldReturnFalse(string nhsNumber)
     {
-        var result = ValidationUtils.BeValidNhsNumber(nhsNumber);
+        var result = Utils.BeValidNhsNumber(nhsNumber);
         result.Should().BeFalse();
     }
 
     [Fact]
     public void BeValidNhsNumber_Should_IgnoreSpaces()
     {
-        var result = ValidationUtils.BeValidNhsNumber("137 364 5350"); // Valid with spaces
+        var result = Utils.BeValidNhsNumber("137 364 5350"); // Valid with spaces
         result.Should().BeTrue();
+    }
+
+    [Theory]
+    [InlineData("1h", 3600)]
+    [InlineData("30m", 1800)]
+    [InlineData("1h30m", 5400)]
+    [InlineData("2h15m", 8100)]
+    [InlineData("0h5m", 300)]
+    [InlineData("10h0m", 36000)]
+    [InlineData("0h0m", 0)]
+    public void ParseDurationToSeconds_ValidInputs_ReturnsExpectedSeconds(string input, int expected)
+    {
+        var result = Utils.ParseDurationToSeconds(input);
+        result.Should().Be(expected);
+    }
+
+    [Theory]
+    [InlineData("h30m")]
+    [InlineData("1hour")]
+    [InlineData("1h30")]
+    [InlineData("m")]
+    [InlineData("1x30m")]
+    public void ParseDurationToSeconds_InvalidInputs_ThrowsFormatException(string input)
+    {
+        Action act = () => Utils.ParseDurationToSeconds(input);
+        act.Should().Throw<FormatException>();
     }
 }

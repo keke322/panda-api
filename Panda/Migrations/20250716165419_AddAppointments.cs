@@ -19,7 +19,7 @@ namespace Panda.Migrations
                     PatientId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Status = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
                     ScheduledAt = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
-                    DurationMinutes = table.Column<int>(type: "INTEGER", nullable: false),
+                    Duration = table.Column<int>(type: "INTEGER", nullable: false),
                     Attended = table.Column<bool>(type: "INTEGER", nullable: false),
                     Clinician = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     Department = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),

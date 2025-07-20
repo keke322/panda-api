@@ -14,8 +14,8 @@ public class AppointmentValidator : AbstractValidator<Appointment>
             .GreaterThan(DateTimeOffset.UtcNow.AddMinutes(-5))
             .WithMessage(localizer["Schedule_NowOrFuture"]);
 
-        RuleFor(a => a.DurationMinutes)
-            .GreaterThan(0)
+        RuleFor(a => a.Duration)
+            .Must(duration => Utils.ParseDurationToSeconds(duration) > 0)
             .WithMessage(localizer["Duration_Positive"]);
 
         RuleFor(a => a.Clinician)
@@ -27,7 +27,7 @@ public class AppointmentValidator : AbstractValidator<Appointment>
             .MaximumLength(100);
 
         RuleFor(a => a.Postcode)
-            .Must(ValidationUtils.IsValidUkPostcode)
+            .Must(Utils.IsValidUkPostcode)
             .WithMessage(localizer["Postcode_Invalid"]);
 
         RuleFor(a => a.Status)

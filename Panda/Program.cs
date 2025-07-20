@@ -18,8 +18,11 @@ builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
 // --- EF Core (SQLite example, swap easily to SqlServer or Postgres)
-builder.Services.AddDbContext<PandaDbContext>(options =>
-    options.UseSqlite("Data Source=SQLite\\panda.db"));
+if (!builder.Environment.IsEnvironment("AutomatedTesting"))
+{
+    builder.Services.AddDbContext<PandaDbContext>(options =>
+        options.UseSqlite("Data Source=SQLite\\panda.db"));
+}
 
 // --- Dependency Injection
 builder.Services.AddScoped<IRepository<Patient>, PatientRepository>();
@@ -60,11 +63,19 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+
 // --- Migrate DB on startup
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<PandaDbContext>();
-    db.Database.Migrate();
+    if (db.Database.IsRelational())
+    {
+        db.Database.Migrate();
+    }
+    else
+    {
+        db.Database.EnsureCreated();
+    }
 }
 
 var supportedCultures = new[] { "en", "fr", "es" };
@@ -87,3 +98,4 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
+public partial class Program { }

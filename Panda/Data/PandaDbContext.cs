@@ -45,7 +45,7 @@ public class PandaDbContext : DbContext
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Status).IsRequired().HasMaxLength(20);
             entity.Property(e => e.ScheduledAt).IsRequired();
-            entity.Property(e => e.DurationMinutes).IsRequired();
+            entity.Property(e => e.Duration).IsRequired();
             entity.Property(e => e.Clinician).HasMaxLength(100);
             entity.Property(e => e.Department).HasMaxLength(100);
             entity.Property(e => e.Postcode).HasMaxLength(8);

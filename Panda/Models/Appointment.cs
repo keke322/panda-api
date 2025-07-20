@@ -11,7 +11,7 @@
 
         public DateTimeOffset ScheduledAt { get; set; }
 
-        public int DurationMinutes { get; set; }
+        public string Duration { get; set; } = string.Empty;
 
         public bool Attended { get; set; }
 

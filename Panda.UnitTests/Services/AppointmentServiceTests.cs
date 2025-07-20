@@ -81,7 +81,8 @@ public class AppointmentServiceTests
             Id = Guid.NewGuid(),
             ScheduledAt = DateTimeOffset.UtcNow.AddMinutes(-30),
             Status = "scheduled",
-            Attended = false
+            Attended = false,
+            Duration = "20m"
         };
 
         _apptRepoMock.Setup(r => r.GetAllAsync()).ReturnsAsync(new List<Appointment> { appointment });
@@ -91,5 +92,73 @@ public class AppointmentServiceTests
 
         result.Should().ContainSingle();
         result.First().Status.Should().Be("missed");
+    }
+
+    [Fact]
+    public void Should_MarkAsMissed_When_ScheduledAndExpiredAndNotAttended()
+    {
+        var service = CreateService();
+        var appt = new Appointment
+        {
+            Status = "scheduled",
+            ScheduledAt = DateTimeOffset.UtcNow.AddMinutes(-61),
+            Duration = "60m",
+            Attended = false
+        };
+
+        service.MarkAsMissedIfNeeded(appt);
+
+        appt.Status.Should().Be("missed");
+    }
+
+    [Fact]
+    public void Should_NotChangeStatus_When_AlreadyAttended()
+    {
+        var service = CreateService();
+        var appt = new Appointment
+        {
+            Status = "scheduled",
+            ScheduledAt = DateTimeOffset.UtcNow.AddMinutes(-61),
+            Duration = "60m",
+            Attended = true
+        };
+
+        service.MarkAsMissedIfNeeded(appt);
+
+        appt.Status.Should().Be("scheduled");
+    }
+
+    [Fact]
+    public void Should_NotChangeStatus_When_StillInProgress()
+    {
+        var service = CreateService();
+        var appt = new Appointment
+        {
+            Status = "scheduled",
+            ScheduledAt = DateTimeOffset.UtcNow.AddMinutes(-10),
+            Duration = "30m",
+            Attended = false
+        };
+
+        service.MarkAsMissedIfNeeded(appt);
+
+        appt.Status.Should().Be("scheduled");
+    }
+
+    [Fact]
+    public void Should_NotChangeStatus_When_StatusIsNotScheduled()
+    {
+        var service = CreateService();
+        var appt = new Appointment
+        {
+            Status = "cancelled",
+            ScheduledAt = DateTimeOffset.UtcNow.AddMinutes(-61),
+            Duration = "60m",
+            Attended = false
+        };
+
+        service.MarkAsMissedIfNeeded(appt);
+
+        appt.Status.Should().Be("cancelled");
     }
 }
