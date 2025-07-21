@@ -16,7 +16,7 @@ namespace Panda.IntegrationTests
 
         public ApiTests(PandaApiFactory factory)
         {
-            //_client = factory.CreateClient();
+            _client = factory.CreateClient();
         }
 
         [Fact]
