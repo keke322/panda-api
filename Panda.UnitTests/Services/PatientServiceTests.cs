@@ -7,10 +7,6 @@ using Microsoft.Extensions.Logging;
 using Panda.Models;
 using Panda.Repositories;
 using Panda.Services;
-using Microsoft.EntityFrameworkCore.Query;
-using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using MockQueryable;
 
 public class PatientServiceTests
@@ -50,6 +46,43 @@ public class PatientServiceTests
 
         result.Should().Be(patient);
         _repoMock.Verify(r => r.AddAsync(patient), Times.Once);
+    }
+
+    [Fact]
+    public async Task CreateAsync_Should_Throw_WhenRepeated()
+    {
+        _repoMock.CallBase = true;
+        var patient = new Patient
+        {
+            Name = "Jane Doe",
+            NhsNumber = "1234567890",
+            DateOfBirth = DateTimeOffset.Now.AddYears(-30),
+            Postcode = "AB1 2CD"
+        };
+
+        _validatorMock.Setup(v => v.Validate(patient))
+            .Returns(new ValidationResult());
+
+        var users = new List<Patient>()
+        {
+            new Patient
+            {
+                Name = "Jane Doe",
+                NhsNumber = "1234567890",
+                DateOfBirth = DateTimeOffset.Now.AddYears(-30),
+                Postcode = "AB1 2CD"
+            }
+
+        };
+
+        var mock = users.AsQueryable().BuildMock();
+        _repoMock.Setup(x => x.Query()).Returns(mock);
+
+        _repoMock.Setup(r => r.AddAsync(patient))
+            .ReturnsAsync(patient);
+
+        var service = CreateService();
+        await Assert.ThrowsAsync<ValidationException>(() => service.CreateAsync(patient));
     }
 
     [Fact]
