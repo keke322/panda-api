@@ -7,7 +7,7 @@ namespace Panda.Repositories;
 
 public class AppointmentRepository : IRepository<Appointment>
 {
-    private readonly PandaDbContext _context;
+    public PandaDbContext _context;
 
     public AppointmentRepository(PandaDbContext context)
     {

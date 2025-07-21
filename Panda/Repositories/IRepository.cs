@@ -1,4 +1,6 @@
-﻿namespace Panda.Repositories;
+﻿using Panda.Data;
+
+namespace Panda.Repositories;
 
 public interface IRepository<T> where T : class
 {

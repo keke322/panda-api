@@ -7,12 +7,11 @@ using Microsoft.Extensions.Logging;
 using Panda.Models;
 using Panda.Repositories;
 using Panda.Services;
-using System;
+using Microsoft.EntityFrameworkCore.Query;
+using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Panda.Models;
-using Panda.Repositories;
-using Panda.Services;
+using MockQueryable;
 
 public class PatientServiceTests
 {
@@ -26,6 +25,7 @@ public class PatientServiceTests
     [Fact]
     public async Task CreateAsync_Should_AddPatient_WhenValid()
     {
+        _repoMock.CallBase = true;
         var patient = new Patient
         {
             Name = "Jane Doe",
@@ -36,6 +36,11 @@ public class PatientServiceTests
 
         _validatorMock.Setup(v => v.Validate(patient))
             .Returns(new ValidationResult());
+
+        var users = new List<Patient>();
+
+        var mock = users.AsQueryable().BuildMock();
+        _repoMock.Setup(x => x.Query()).Returns(mock);
 
         _repoMock.Setup(r => r.AddAsync(patient))
             .ReturnsAsync(patient);

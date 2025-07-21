@@ -12,6 +12,7 @@ This is the backend API for PANDA, a CRUD application for tracking patients and 
 - **AutoMapper** for DTO mapping
 - **Swagger** for API exploration
 - **XUnit / Moq** (for unit tests)
+- **MVC WebAppFactory** (for integration tests)
 
 ---
 
@@ -54,6 +55,10 @@ This is the backend API for PANDA, a CRUD application for tracking patients and 
     ```
     http://localhost:5224
     ```
+    Swagger UI available at:    
+    ```
+    http://localhost:5224/swagger/index.html
+    ```
 
 ---
 
@@ -71,8 +76,3 @@ This is the backend API for PANDA, a CRUD application for tracking patients and 
 | POST   | `/api/appointment`               | Create an appointment    |
 | PUT    | `/api/appointment/{id}`          | Update an appointment    |
 | POST   | `/api/appointment/{id}/cancel`   | Cancel an appointment    |
-
-Swagger UI available at:
-
-http://localhost:5224/swagger/index.html
-Latests version of AutoMapper was not used as it now requires a service key

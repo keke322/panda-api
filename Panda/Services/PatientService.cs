@@ -36,12 +36,16 @@ public class PatientService : IPatientService
 
         var existing = await _patientRepository.Query()
         .FirstOrDefaultAsync(p => p.NhsNumber == patient.NhsNumber);
-
+        
         if (existing != null)
         {
             _logger.LogWarning("Patient with NHS Number {NhsNumber} already exists (ID: {PatientId})",
-                existing.NhsNumber, existing.Id);
-            return existing;
+                existing.NhsNumber, existing.Id); 
+            var errors = new List<ValidationFailure>
+                {
+                    new ValidationFailure { PropertyName = "NHS Number" , ErrorMessage = $"Patient with NHS number {patient.NhsNumber} already exists."}
+                };
+            throw new ValidationException("", errors: errors);
         }
 
         patient.Id = Guid.NewGuid();

@@ -32,6 +32,9 @@ public class PandaDbContext : DbContext
                 .IsRequired()
                 .HasMaxLength(10);
 
+            entity.HasIndex(e => e.NhsNumber) 
+                .IsUnique();
+
             entity.Property(e => e.DateOfBirth)
                 .IsRequired();
 

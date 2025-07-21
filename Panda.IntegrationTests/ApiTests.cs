@@ -53,7 +53,7 @@ namespace Panda.IntegrationTests
             {
                 Name = "Alice Smith",
                 DateOfBirth = DateTimeOffset.Now.AddYears(-30),
-                NhsNumber = "9876543210",
+                NhsNumber = "1953262716",
                 Postcode = "XY99ZZ"
             });
 
@@ -101,7 +101,7 @@ namespace Panda.IntegrationTests
             {
                 Name = "Delete Me",
                 DateOfBirth = DateTimeOffset.Now.AddYears(-20),
-                NhsNumber = "1373645350",
+                NhsNumber = "0021403597",
                 Postcode = "N6 2FA"
             });
 
@@ -133,13 +133,13 @@ namespace Panda.IntegrationTests
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
         }
         
-        private async Task<CreateAppointmentDto> GetSampleDtoAsync()
+        private async Task<CreateAppointmentDto> GetSampleDtoAsync(string nhsNumer)
         {
             var patDto = new CreatePatientDto
             {
                 Name = "Dr Glenn Clark",
                 DateOfBirth = new DateTimeOffset(1996, 1, 1, 0, 0, 0, TimeSpan.Zero),
-                NhsNumber = "1373645350",
+                NhsNumber = nhsNumer,
                 Postcode = "N6 2FA"
             };
 
@@ -162,7 +162,7 @@ namespace Panda.IntegrationTests
         [Fact]
         public async Task Create_ShouldReturnCreatedAppointment_WithExpectedFields()
         {
-            var dto = await GetSampleDtoAsync();
+            var dto = await GetSampleDtoAsync("0240288238");
 
             var response = await _client.PostAsJsonAsync("/api/appointment", dto);
             response.StatusCode.Should().Be(HttpStatusCode.Created);
@@ -177,7 +177,7 @@ namespace Panda.IntegrationTests
         [Fact]
         public async Task GetById_ShouldReturnCorrectAppointment()
         {
-            var dto = await GetSampleDtoAsync();
+            var dto = await GetSampleDtoAsync("0699052556");
             var create = await _client.PostAsJsonAsync("/api/appointment", dto);
             var created = await create.Content.ReadFromJsonAsync<AppointmentDto>();
 
@@ -192,7 +192,7 @@ namespace Panda.IntegrationTests
         [Fact]
         public async Task Update_ShouldChangeAppointmentDetails()
         {
-            var dto = await GetSampleDtoAsync();
+            var dto = await GetSampleDtoAsync("0544469364");
             var create = await _client.PostAsJsonAsync("/api/appointment", dto);
             var created = await create.Content.ReadFromJsonAsync<AppointmentDto>();
 
@@ -220,7 +220,7 @@ namespace Panda.IntegrationTests
         [Fact]
         public async Task Cancel_ShouldReturnNoContent_AndStatusShouldChange()
         {
-            var dto = await GetSampleDtoAsync();
+            var dto = await GetSampleDtoAsync("1635754941");
             var create = await _client.PostAsJsonAsync("/api/appointment", dto);
             var created = await create.Content.ReadFromJsonAsync<AppointmentDto>();
 
@@ -237,7 +237,7 @@ namespace Panda.IntegrationTests
         [Fact]
         public async Task CancelledAppointment_CannotBeUpdatedOrReinstated()
         {
-            var dto = await GetSampleDtoAsync();
+            var dto = await GetSampleDtoAsync("1431315257");
             var create = await _client.PostAsJsonAsync("/api/appointment", dto);
             var created = await create.Content.ReadFromJsonAsync<AppointmentDto>();
 
@@ -274,7 +274,7 @@ namespace Panda.IntegrationTests
         [Fact]
         public async Task Appointment_ShouldBeMarkedAsMissed_IfPastAndNotAttended()
         {
-            var pastAppointment = await GetSampleDtoAsync();
+            var pastAppointment = await GetSampleDtoAsync("1859995799");
             pastAppointment.ScheduledAt = DateTimeOffset.Now.AddMinutes(-3);
             pastAppointment.Duration = "1m";
             var createResponse = await _client.PostAsJsonAsync("/api/appointment", pastAppointment);
@@ -295,7 +295,7 @@ namespace Panda.IntegrationTests
         [Fact]
         public async Task GetMissedImpact_ShouldReturnImpact()
         {
-            var pastAppointment = await GetSampleDtoAsync();
+            var pastAppointment = await GetSampleDtoAsync("1685807151");
             pastAppointment.ScheduledAt = DateTimeOffset.Now.AddMinutes(-3);
             pastAppointment.Duration = "1m";
             var createResponse = await _client.PostAsJsonAsync("/api/appointment", pastAppointment);
@@ -319,19 +319,19 @@ namespace Panda.IntegrationTests
         }
 
         [Theory]
-        [InlineData("José")]
-        [InlineData("Mårten")]
-        [InlineData("Łukasz")]
-        [InlineData("Émilie")]
-        [InlineData("Zoë")]
-        [InlineData("François")]
-        public async Task DiacriticNames_ShouldBeCreatedAndGet(string name)
+        [InlineData("José", "1962097471")]
+        [InlineData("Mårten", "0803542917")]
+        [InlineData("Łukasz", "1099239362")]
+        [InlineData("Émilie", "0738835919")]
+        [InlineData("Zoë", "0804125937")]
+        [InlineData("François", "0162509243")]
+        public async Task DiacriticNames_ShouldBeCreatedAndGet(string name, string nhsNumber)
         {
             var dto = new CreatePatientDto
             {
                 Name = name,
                 DateOfBirth = DateTimeOffset.UtcNow.AddYears(-30),
-                NhsNumber = "1373645350",
+                NhsNumber = nhsNumber,
                 Postcode = "AA1 1AA"
             };
 

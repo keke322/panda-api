@@ -7,7 +7,7 @@ namespace Panda.Repositories;
 
 public class PatientRepository : IRepository<Patient>
 {
-    private readonly PandaDbContext _context;
+    public PandaDbContext _context;
 
     public PatientRepository(PandaDbContext context)
     {
