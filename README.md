@@ -76,3 +76,5 @@ This is the backend API for PANDA, a CRUD application for tracking patients and 
 | POST   | `/api/appointment`               | Create an appointment    |
 | PUT    | `/api/appointment/{id}`          | Update an appointment    |
 | POST   | `/api/appointment/{id}/cancel`   | Cancel an appointment    |
+
+## 
