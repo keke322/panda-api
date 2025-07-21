@@ -42,4 +42,8 @@ public class PatientRepository : IRepository<Patient>
         _context.Patients.Remove(entity);
         await _context.SaveChangesAsync();
     }
+    public IQueryable<Patient> Query()
+    {
+        return _context.Patients.AsQueryable();
+    }
 }

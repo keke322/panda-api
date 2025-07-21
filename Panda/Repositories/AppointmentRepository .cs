@@ -45,4 +45,8 @@ public class AppointmentRepository : IRepository<Appointment>
         _context.Appointments.Remove(appointment);
         await _context.SaveChangesAsync();
     }
+    public IQueryable<Appointment> Query()
+    {
+        return _context.Appointments.AsQueryable();
+    }
 }

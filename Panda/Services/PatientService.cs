@@ -3,6 +3,7 @@ using Panda.Repositories;
 using FluentValidation;
 using FluentValidation.Results;
 using Panda.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace Panda.Services;
 
@@ -32,6 +33,16 @@ public class PatientService : IPatientService
     public async Task<Patient> CreateAsync(Patient patient)
     {
         ValidatePatient(patient);
+
+        var existing = await _patientRepository.Query()
+        .FirstOrDefaultAsync(p => p.NhsNumber == patient.NhsNumber);
+
+        if (existing != null)
+        {
+            _logger.LogWarning("Patient with NHS Number {NhsNumber} already exists (ID: {PatientId})",
+                existing.NhsNumber, existing.Id);
+            return existing;
+        }
 
         patient.Id = Guid.NewGuid();
         var created = await _patientRepository.AddAsync(patient);

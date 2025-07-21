@@ -107,4 +107,13 @@ public class AppointmentController : ControllerBase
 
         return NoContent();
     }
+
+    // GET: api/analytics/missed
+    [HttpGet("analytics/missed")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<MissedAppointmentSummary>))]
+    public IActionResult GetMissedImpact()
+    {
+        var result = _appointmentService.GetMissedAppointmentImpactAsync();
+        return Ok(result);
+    }
 }

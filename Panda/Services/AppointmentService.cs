@@ -4,6 +4,7 @@ using Panda.Models;
 using Panda.Repositories;
 using Microsoft.Extensions.Logging;
 using Panda.Api.Utils;
+using Microsoft.EntityFrameworkCore;
 
 namespace Panda.Services;
 
@@ -45,6 +46,7 @@ public class AppointmentService : IAppointmentService
         if (appt != null)
         {
             MarkAsMissedIfNeeded(appt);
+            await _appointmentRepo.UpdateAsync(appt);
         }
         return appt;
     }
@@ -119,7 +121,41 @@ public class AppointmentService : IAppointmentService
         return true;
     }
 
+    public IEnumerable<MissedAppointmentSummary> GetMissedAppointmentImpactAsync()
+    {
+        var now = DateTimeOffset.UtcNow;
+
+        var allAppointments = _appointmentRepo
+            .Query()
+            .AsEnumerable()
+            .Where(a =>
+                IsAppointmentMissed(a)
+            ).ToList();
+
+        var grouped = allAppointments
+            .GroupBy(a => new { a.Clinician, a.Department })
+            .Select(g => new MissedAppointmentSummary
+            {
+                Clinician = g.Key.Clinician,
+                Department = g.Key.Department,
+                MissedCount = g.Count(),
+                TotalSecondsMissed = g.Sum(a => Utils.ParseDurationToSeconds(a.Duration)),
+                MostRecentMissed = g.Max(a => a.ScheduledAt)
+            })
+            .ToList();
+
+        return grouped;
+    }
+
     public void MarkAsMissedIfNeeded(Appointment appt)
+    {
+        if (IsAppointmentMissed(appt))
+        {
+            appt.Status = "missed";
+        }
+    }
+
+    public bool IsAppointmentMissed(Appointment appt)
     {
         var duration = Utils.ParseDurationToSeconds(appt.Duration);
         var endTime = appt.ScheduledAt.AddSeconds(duration);
@@ -128,8 +164,9 @@ public class AppointmentService : IAppointmentService
             && endTime < DateTimeOffset.UtcNow
             && !appt.Attended)
         {
-            appt.Status = "missed";
+            return true;
         }
+        return false;
     }
 
     private void Validate(Appointment appointment)
