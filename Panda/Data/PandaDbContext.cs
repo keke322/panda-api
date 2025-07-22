@@ -56,7 +56,7 @@ public class PandaDbContext : DbContext
             entity.HasOne(e => e.Patient)
                 .WithMany()
                 .HasForeignKey(e => e.PatientId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Cascade);//Could be changed to Restrict if we want to keep records for auditing or history
         });
     }
 }
