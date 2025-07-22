@@ -86,12 +86,12 @@ This is the backend API for PANDA, a CRUD application for tracking patients and 
 
 ## Design considerations
 
-- Appointment model was changed to use patientID to relate to patient table instead of NHS number as foreign key because NHSnumber as a string is less efficient than GUID and if for any reason however unlikely NHSnumber changes, multiple updates to tables will be needed
-- For this project the priority of development focused on SOLID principles and testing automation
+- Appointment model was changed to use patientID to relate to patient table instead of NHS number as foreign key because NHSnumber as a string is less efficient than GUID and if for any reason however unlikely NHSnumber changes, multiple updates to tables will be needed.
+- For this project the priority of development focused on SOLID principles and testing automation.
 
 ## Future work
 
-- Wide range of automated testing, including localised error messages and more edge cases
-- Extract the analitics controller into its own controller route in order to add more future data sets
-- Clinician information needs to be extracted into its own entity very much like Patient and so the appointment model will only contain a reference to clinician ID
-- GDPR considerations need to be extended to encrypt patient Data that could be patient identifiable
+- Wide range of automated testing, including localised error messages and more edge cases.
+- Extract the analytics controller into its own controller route in order to add more future data sets.
+- Clinician information needs to be extracted into its own entity very much like Patient and so the appointment model will only contain a reference to clinician ID.
+- GDPR considerations need to be extended to encrypt patient Data that could be patient identifiable.
