@@ -87,4 +87,4 @@ This is the backend API for PANDA, a CRUD application for tracking patients and 
 ## Design considerations
 
 - Appointment model was changed to use patientID to relate to patient table instead of NHS number as foreign key because NHSnumber as a string is less efficient than GUID and if for any reason however unlikely NHSnumber changes, multiple updates to tables will be needed
-- For this project the priority of development , focused on SOLID principles and testing automation
+- For this project the priority of development focused on SOLID principles and testing automation
