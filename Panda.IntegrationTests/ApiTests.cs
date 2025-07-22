@@ -312,10 +312,15 @@ namespace Panda.IntegrationTests
             var updated = await checkResponse.Content.ReadFromJsonAsync<AppointmentDto>();
             updated!.Status.Should().Be("missed");
 
-            var impact = await _client.GetAsync($"/api/appointment/analytics/missed");
+            var impact = await _client.GetAsync($"/api/appointment/analytics/byclinician");
             impact.StatusCode.Should().Be(HttpStatusCode.OK);
             var impactBody = await impact.Content.ReadFromJsonAsync<List<MissedAppointmentSummary>>();
             impactBody.Should().NotBeNull();
+
+            var impactByDept = await _client.GetAsync($"/api/appointment/analytics/bydepartment");
+            impactByDept.StatusCode.Should().Be(HttpStatusCode.OK);
+            var impactBodyByDept = await impactByDept.Content.ReadFromJsonAsync<List<MissedAppointmentSummary>>();
+            impactBodyByDept.Should().NotBeNull();
         }
 
         [Theory]

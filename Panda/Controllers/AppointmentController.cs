@@ -108,12 +108,21 @@ public class AppointmentController : ControllerBase
         return NoContent();
     }
 
-    // GET: api/analytics/missed
-    [HttpGet("analytics/missed")]
+    // GET: api/analytics/byclinician
+    [HttpGet("analytics/byclinician")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<MissedAppointmentSummary>))]
-    public IActionResult GetMissedImpact()
+    public IActionResult GetMissedImpactByClinician()
     {
-        var result = _appointmentService.GetMissedAppointmentImpactAsync();
+        var result = _appointmentService.GetMissedAppointmentImpactByClinician();
+        return Ok(result);
+    }
+
+    // GET: api/analytics/bydepartment
+    [HttpGet("analytics/bydepartment")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<MissedAppointmentSummary>))]
+    public IActionResult GetMissedImpactByDepartment()
+    {
+        var result = _appointmentService.GetMissedAppointmentImpactByDepartment();
         return Ok(result);
     }
 }

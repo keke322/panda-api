@@ -5,6 +5,7 @@ using Panda.Repositories;
 using Microsoft.Extensions.Logging;
 using Panda.Api.Utils;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace Panda.Services;
 
@@ -121,7 +122,7 @@ public class AppointmentService : IAppointmentService
         return true;
     }
 
-    public IEnumerable<MissedAppointmentSummary> GetMissedAppointmentImpactAsync()
+    public IEnumerable<MissedAppointmentSummary> GetMissedAppointmentImpactByClinician()
     {
         var now = DateTimeOffset.UtcNow;
 
@@ -133,15 +134,57 @@ public class AppointmentService : IAppointmentService
             ).ToList();
 
         var grouped = allAppointments
-            .GroupBy(a => new { a.Clinician, a.Department })
+            .GroupBy(a => new
+            {
+                a.Clinician,
+                Year = a.ScheduledAt.Year,
+                Month = a.ScheduledAt.Month
+            })
             .Select(g => new MissedAppointmentSummary
             {
                 Clinician = g.Key.Clinician,
-                Department = g.Key.Department,
+                Year = g.Key.Year,
+                Month = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(g.Key.Month),
                 MissedCount = g.Count(),
-                TotalSecondsMissed = g.Sum(a => Utils.ParseDurationToSeconds(a.Duration)),
-                MostRecentMissed = g.Max(a => a.ScheduledAt)
+                TotalSecondsMissed = g.Sum(a => Utils.ParseDurationToSeconds(a.Duration))
             })
+            .OrderBy(g => g.Clinician)
+            .ThenBy(g => g.Year)
+            .ThenBy(g => g.Month)
+            .ToList();
+
+        return grouped;
+    }
+
+    public IEnumerable<MissedAppointmentSummary> GetMissedAppointmentImpactByDepartment()
+    {
+        var now = DateTimeOffset.UtcNow;
+
+        var allAppointments = _appointmentRepo
+            .Query()
+            .AsEnumerable()
+            .Where(a =>
+                IsAppointmentMissed(a)
+            ).ToList();
+
+        var grouped = allAppointments
+            .GroupBy(a => new
+            {
+                a.Department,
+                Year = a.ScheduledAt.Year,
+                Month = a.ScheduledAt.Month
+            })
+            .Select(g => new MissedAppointmentSummary
+            {
+                Department = g.Key.Department,
+                Year = g.Key.Year,
+                Month = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(g.Key.Month),
+                MissedCount = g.Count(),
+                TotalSecondsMissed = g.Sum(a => Utils.ParseDurationToSeconds(a.Duration))
+            })
+            .OrderBy(g => g.Department)
+            .ThenBy(g => g.Year)
+            .ThenBy(g => g.Month)
             .ToList();
 
         return grouped;

@@ -59,22 +59,32 @@ This is the backend API for PANDA, a CRUD application for tracking patients and 
     ```
     http://localhost:5224/swagger/index.html
     ```
-
+5. **Testing**
+    ```bash
+    cd ..
+    dotnet run
+    ```
 ---
 
 ## API Endpoints
 
-| Method | URL                              | Description              |
-|--------|----------------------------------|--------------------------|
-| GET    | `/api/patients`                  | List all patients        |
-| GET    | `/api/patients/{id}`             | Get patient by ID        |
-| POST   | `/api/patients`                  | Create a patient         |
-| PUT    | `/api/patients/{id}`             | Update a patient         |
-| DELETE | `/api/patients/{id}`             | Delete a patient         |
-| GET    | `/api/appointment`               | List all appointments    |
-| GET    | `/api/appointment/{id}`          | Get appointment by ID    |
-| POST   | `/api/appointment`               | Create an appointment    |
-| PUT    | `/api/appointment/{id}`          | Update an appointment    |
-| POST   | `/api/appointment/{id}/cancel`   | Cancel an appointment    |
+| Method | URL                                      | Description              |
+|--------|------------------------------------------|--------------------------|
+| GET    | `/api/patients`                          | List all patients        |
+| GET    | `/api/patients/{id}`                     | Get patient by ID        |
+| POST   | `/api/patients`                          | Create a patient         |
+| PUT    | `/api/patients/{id}`                     | Update a patient         |
+| DELETE | `/api/patients/{id}`                     | Delete a patient         |
+| GET    | `/api/appointment`                       | List all appointments    |
+| GET    | `/api/appointment/{id}`                  | Get appointment by ID    |
+| POST   | `/api/appointment`                       | Create an appointment    |
+| PUT    | `/api/appointment/{id}`                  | Update an appointment    |
+| POST   | `/api/appointment/{id}/cancel`           | Cancel an appointment    |
+| GET    | `/api/appointment/analytics/byclinician`      | Analytics for missed appointments    |
+| GET    | `/api/appointment/analytics/bydepartment`      | Analytics for missed appointments    |
 
-## 
+
+## Design considerations
+
+- Appointment model was changed to use patientID to relate to patient table instead of NHS number as foreign key because NHSnumber as a string is less efficient than GUID and if for any reason however unlikely NHSnumber changes, multiple updates to tables will be needed
+- For this project the priority of development , focused on SOLID principles and testing automation
