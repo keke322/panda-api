@@ -41,13 +41,18 @@ This is the backend API for PANDA, a CRUD application for tracking patients and 
     dotnet restore
     ```
 
-3. **Run migrations**
+3. **Automated testing**
+    ```bash
+    dotnet test
+    ```
+ 
+4. **Run migrations**
     ```bash
     cd Panda
     dotnet ef database update
     ```
 
-4. **Run the application**
+5. **Run the application**
     ```bash
     dotnet run
     ```
@@ -58,11 +63,6 @@ This is the backend API for PANDA, a CRUD application for tracking patients and 
     Swagger UI available at:    
     ```
     http://localhost:5224/swagger/index.html
-    ```
-5. **Testing**
-    ```bash
-    cd ..
-    dotnet run
     ```
 ---
 
